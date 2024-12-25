@@ -1,0 +1,14 @@
+# resolver 1.1.1.1 valid=300s;
+# resolver_timeout 10s;
+
+server {
+    access_log /var/log/nginx/rtmp-proxy-access.log combined;
+
+    listen 8081;
+    location /on_publish {
+        proxy_pass ${api_host}/live/on_publish;
+    }
+    location /on_publish_done {
+        proxy_pass ${api_host}/live/on_publish_done;
+    }
+}

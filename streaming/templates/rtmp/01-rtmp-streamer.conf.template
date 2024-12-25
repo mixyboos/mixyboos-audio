@@ -1,0 +1,42 @@
+server {
+    access_log /var/log/nginx/rtmp-access.log combined;
+    listen 1935;
+    application live {
+        live on;
+        deny play all;
+        
+        #this will redirect to the hls-live application
+        #(which will allow us to use the show id instead of the stream key in the show url)
+        push rtmp://127.0.0.1:1935/hls-live;
+        #don't use localhost here as it doesn't working in docker
+        on_publish http://127.0.0.1:8081/on_publish;
+        on_publish_done http://127.0.0.1:8081/on_publish_done;
+    }
+    application hls-live {
+
+        allow publish 127.0.0.1;
+        deny publish all;
+
+        # Package this stream as HLS
+        hls on;
+        hls_path /mnt/streams/hls;
+        hls_nested on;
+        hls_fragment 5s;
+        hls_fragment_naming system;
+        hls_cleanup off;
+
+        dash on;
+        dash_path /mnt/streams/dash;
+
+        dash_nested on;
+        dash_cleanup on;
+
+        recorder all {
+            record all;
+            record_path /mnt/recordings/processing;
+            record_max_size 100000K;
+
+            exec_record_done bash /opt/scripts/post_process_show.sh $path $basename;
+        }
+    }
+}

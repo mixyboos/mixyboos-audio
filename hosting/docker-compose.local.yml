@@ -1,0 +1,25 @@
+services:
+  rtmp:
+    image: ghcr.io/mixyboos/mixyboos-docker
+    container_name: mixyboos-audio-testing
+    restart:
+      unless-stopped
+    ports:
+      - "9091:9091"
+      - "1935:1935"
+      - "9595:9595"
+    environment:
+      - request_method=$$request_method
+      - api_host=https://mixyboos.dev.fergl.ie:5001
+      - stream_url=live-mixyboos.dev.fergl.ie
+      - listen_url=live-mixyboos.dev.fergl.ie
+      - ssl_directive=ssl
+      - ssl_certificate=ssl_certificate /opt/ssl/fullchain5.pem;
+      - ssl_certificate_key=ssl_certificate_key /opt/ssl/privkey5.pem;
+    volumes:
+      - ./mounts/audio:/mnt/
+      - ./mounts/log:/var/log/nginx/
+      - ./mounts/scripts:/opt/scripts/
+      # - ./nginx/rtmp/scripts:/scripts/
+      # - ./nginx/rtmp/index.html:/mnt/index.html
+      - /etc/letsencrypt/archive/dev.fergl.ie:/opt/ssl/

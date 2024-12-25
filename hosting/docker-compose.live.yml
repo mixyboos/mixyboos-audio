@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  rtmp:
+    build: ./rtmp
+    ports:
+      - "1935:1935"
+    volumes:
+      - /opt/mixyboos/data/mnt:/mnt/
+      - /opt/mixyboos/data/log:/var/log/nginx/
+    container_name: mixyboos_audio_services_live
+    networks:
+      - "traefik_proxy"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mixybooslive.rule=Host(`live.mixyboos.com`)"
+      - "traefik.http.routers.mixybooslive.entrypoints=websecure"
+      - "traefik.http.routers.mixybooslive.tls.certresolver=noodles-resolver"
+      - "traefik.http.services.mixybooslive.loadbalancer.server.port=9091"
+networks:
+  traefik_proxy:
+    name: traefik_proxy
+    external: true

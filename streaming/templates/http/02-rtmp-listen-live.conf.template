@@ -1,0 +1,18 @@
+server {
+
+    access_log /var/log/nginx/rtmp-listen-access.log combined;
+
+    listen 9091 $ssl_directive;
+    server_name $stream_url;
+    
+    $ssl_certificate
+    $ssl_certificate_key
+
+    location / {
+        root /mnt/streams ;
+        include /etc/nginx/mime.types;
+        add_header 'Cache-Control' 'no-cache';
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Expose-Headers' 'Content-Length';
+    }
+}
