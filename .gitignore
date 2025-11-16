@@ -1,5 +1,21 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Mounts and data
 hosting/mounts
 scripts/conversion/log
 scripts/conversion/files
 scripts/conversion/testing
 scripts/conversion/files/streams
+
+# Logs
+*.log
+logs/
+
+# Secrets and certificates
+*.pem
+*.key
+*.crt
+*.cer
