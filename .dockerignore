@@ -1,0 +1,11 @@
+.git
+.gitignore
+.github
+README.md
+LICENSE
+*.md
+.editorconfig
+hosting/
+scripts/
+*.log
+.DS_Store
